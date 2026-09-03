@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111416" />
+    <meta name="description" content="A tiny local-first WebMCP playground where you and an AI agent make harmless mischief together." />
+    <meta property="og:title" content="NottyDuck — WebMCP Playground" />
+    <meta property="og:description" content="Move a tiny duck, toss toys, collect sparks, and let an agent join the same world." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://playground.nottyduck.com" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>NottyDuck — WebMCP Playground</title>
+  </head>
+  <body>
+    <div class="boot" id="boot" aria-live="polite">
+      <div class="boot-duck" aria-hidden="true"><span></span></div>
+      <p>Scattering tiny trouble…</p>
+      <div class="boot-track"><i></i></div>
+    </div>
+
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="NottyDuck WebMCP Playground home">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <span><b>NottyDuck</b><small>WebMCP Playground</small></span>
+        </a>
+        <div class="top-actions">
+          <span class="local-pill"><i></i>Local-only</span>
+          <a href="https://github.com/reachjalil/nottyduck-webmcp-playground" target="_blank" rel="noreferrer">View source <span aria-hidden="true">↗</span></a>
+        </div>
+      </header>
+
+      <section class="playground" aria-labelledby="play-title">
+        <div class="stage-wrap">
+          <canvas id="stage" aria-label="An interactive tiny playground. Use arrow keys or WASD to move the duck." tabindex="0"></canvas>
+
+          <div class="stage-copy">
+            <span class="eyebrow">YOU + AN AGENT + ONE TINY DUCK</span>
+            <h1 id="play-title">Make a little<br /><em>harmless trouble.</em></h1>
+            <p>Play it yourself—or ask ChatGPT to move the duck, toss in a beach ball, and remember the story.</p>
+          </div>
+
+          <div class="score-card" aria-live="polite">
+            <span>Sparks</span>
+            <strong><span id="score">0</span><small>/ 6</small></strong>
+          </div>
+
+          <div class="controls" aria-label="Game controls">
+            <button type="button" data-action="surprise"><span>✦</span> Surprise me</button>
+            <button type="button" data-action="ball"><span>●</span> Toss a ball</button>
+            <button type="button" data-action="quack"><span>◖</span> Quack</button>
+          </div>
+
+          <div class="move-hint"><kbd>WASD</kbd><span>or arrows to waddle</span></div>
+          <div class="toast" id="toast" role="status"></div>
+        </div>
+
+        <aside class="panel">
+          <div class="agent-card">
+            <div class="agent-heading">
+              <span class="agent-icon" aria-hidden="true">✣</span>
+              <div><span>Agent access</span><strong id="mcp-label">Checking WebMCP…</strong></div>
+              <i class="status-dot" id="mcp-dot"></i>
+            </div>
+            <p id="mcp-copy">The whole playground still works while we check whether this browser supports WebMCP.</p>
+            <div class="prompt-card">
+              <span>TRY ASKING</span>
+              <button type="button" id="copy-prompt" title="Copy prompt">“Name my duck Pixel, make it purple, then create a surprise.” <b>⌘C</b></button>
+            </div>
+            <div class="tool-count"><span id="tool-count">0</span> tools exposed from the page</div>
+          </div>
+
+          <div class="mission-card">
+            <div class="section-title"><span>Today’s tiny mission</span><small id="mission-status">0 / 6</small></div>
+            <h2>Collect every spark.</h2>
+            <p>Move near the glowing stars. Your progress stays in this browser—no login, cloud, or tracking.</p>
+            <div class="progress"><i id="progress"></i></div>
+          </div>
+
+          <div class="duck-card">
+            <div class="section-title"><span>Your local duck</span><button type="button" data-action="reset">Reset</button></div>
+            <label for="duck-name">Name</label>
+            <input id="duck-name" maxlength="18" autocomplete="off" value="Nibbles" />
+            <fieldset>
+              <legend>Color</legend>
+              <div class="swatches" id="swatches">
+                <button type="button" data-color="yellow" class="yellow selected" aria-label="Yellow"></button>
+                <button type="button" data-color="coral" class="coral" aria-label="Coral"></button>
+                <button type="button" data-color="mint" class="mint" aria-label="Mint"></button>
+                <button type="button" data-color="purple" class="purple" aria-label="Purple"></button>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="memory-card">
+            <div class="section-title"><span>Local memory</span><small>THIS DEVICE</small></div>
+            <ol id="memory" aria-live="polite"></ol>
+          </div>
+        </aside>
+      </section>
+
+      <footer>
+        <span>Built for the <a href="https://openai.com/webmcp-challenge/" target="_blank" rel="noreferrer">OpenAI WebMCP Challenge</a>.</span>
+        <span>Nothing leaves your browser. <button type="button" id="how-it-works">How it works</button></span>
+      </footer>
+    </main>
+
+    <dialog id="about-dialog">
+      <button type="button" class="dialog-close" aria-label="Close">×</button>
+      <span class="eyebrow">HOW IT WORKS</span>
+      <h2>One world. Two ways to play.</h2>
+      <p>You and an agent operate the exact same game actions. The page registers typed WebMCP tools for movement, toys, customization, state, and local memory. Every change is immediately visible and saved only in <code>localStorage</code>.</p>
+      <p>Human input always takes control. If WebMCP is unavailable, every feature remains usable with buttons, pointer, and keyboard.</p>
+      <a href="https://github.com/reachjalil/nottyduck-webmcp-playground" target="_blank" rel="noreferrer">Read the implementation on GitHub →</a>
+    </dialog>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
